@@ -1,0 +1,17 @@
+.ps-menu-icon,
+.ps-menu-label {
+  color: #ccc;
+}
+
+.ps-menu-button:hover .ps-menu-icon,
+.ps-menu-label {
+  color: rgb(56, 56, 56);
+}
+
+.menu {
+}
+
+a.active .ps-menu-icon,
+.ps-menu-label {
+  color: black;
+}
