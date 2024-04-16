@@ -3,10 +3,18 @@ import Webicien from "/Webicien.png";
 
 import { Book, Logout, MessageSharp, Person2, Work } from "@mui/icons-material";
 import "./Sidebar.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Badge } from "@mui/material";
+import { supabase } from "@/utils/supabase";
 
 const SidebarUI = () => {
+  const navigate = useNavigate();
+  const logout = async () => {
+    await supabase.auth.signOut({ scope: "global" });
+    sessionStorage.clear();
+    window.location.reload();
+    navigate("/");
+  };
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <Sidebar className="app">
@@ -32,7 +40,9 @@ const SidebarUI = () => {
             </MenuItem>
           </NavLink>
 
-          <MenuItem icon={<Logout />}>Logout</MenuItem>
+          <MenuItem onClick={() => logout()} icon={<Logout />}>
+            Logout
+          </MenuItem>
         </Menu>
       </Sidebar>
     </div>

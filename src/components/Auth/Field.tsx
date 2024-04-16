@@ -4,7 +4,7 @@ import { Control, Controller } from "react-hook-form";
 import { UserType } from "@/utils/Types";
 
 type FieldTypes = {
-  name: "email" | "password" | "phone";
+  name: "email" | "password";
 
   control: Control<UserType>;
   placeholder: string;
@@ -19,8 +19,7 @@ const Field = ({ control, name, placeholder, type }: FieldTypes) => {
       defaultValue=""
       render={({ field }) => (
         <Input
-          required
-          className="mb-4"
+          className="mb-2"
           {...field}
           placeholder={placeholder}
           type={type}
