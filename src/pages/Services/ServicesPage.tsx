@@ -24,11 +24,12 @@ import { Button } from "@/components/ui/button";
 
 const ServicesPage = () => {
   const [page, setPage] = useState<number>(1);
+  const [title, setTitle] = useState<string>("");
   const { data } = useQuery(
-    ["services", page],
+    ["services", page, title],
     async () => {
       return await axios.get(
-        `http://localhost:5171/api/services?PageNumber=${page}&Limit=${10}`
+        `http://localhost:5171/api/services?PageNumber=${page}&Limit=${9}&Title=${title}`
       );
     },
     { keepPreviousData: true, cacheTime: 0 }
@@ -48,6 +49,7 @@ const ServicesPage = () => {
           <Input
             className="border-2 border-slate-700 shadow-lg"
             placeholder="search for a service"
+            onChange={(e) => setTitle(e.target.value)}
           />
         </div>
       </div>
