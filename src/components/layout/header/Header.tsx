@@ -5,7 +5,7 @@ const Header = () => {
   return (
     <div className="bg-white w-full">
       <div className="px-[50px] py-5 flex justify-between items-center">
-        <div>Dashboard</div>
+        <div className="text-2xl font-bold text-slate-700">Dashboard</div>
         <div className="">
           <Avatar>
             <AvatarImage src={Webicien} />

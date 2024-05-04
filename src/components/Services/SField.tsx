@@ -1,17 +1,16 @@
 import { Input } from "@/components/ui/input";
 
 import { Control, Controller } from "react-hook-form";
-import { LoginType } from "@/utils/Types";
+import { ServiceType } from "@/utils/Types";
 
 type FieldTypes = {
-  name: "password" | "username";
-
-  control: Control<LoginType>;
+  name: "title" | "description";
+  control: Control<ServiceType>;
   placeholder: string;
   type: string;
 };
 
-const Field = ({ control, name, placeholder, type }: FieldTypes) => {
+const SField = ({ control, name, placeholder, type }: FieldTypes) => {
   return (
     <Controller
       name={name}
@@ -19,7 +18,7 @@ const Field = ({ control, name, placeholder, type }: FieldTypes) => {
       defaultValue=""
       render={({ field }) => (
         <Input
-          className="mb-2"
+          className="col-span-3 mb-3 mt-2"
           {...field}
           placeholder={placeholder}
           type={type}
@@ -29,4 +28,4 @@ const Field = ({ control, name, placeholder, type }: FieldTypes) => {
   );
 };
 
-export default Field;
+export default SField;
