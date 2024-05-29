@@ -5,3 +5,9 @@
 body {
   background-color: #eee;
 }
+
+@media (min-width: 993px) {
+  .Drawer {
+    display: none;
+  }
+}

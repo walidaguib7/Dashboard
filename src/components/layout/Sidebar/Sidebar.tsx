@@ -15,7 +15,7 @@ const SidebarUI = () => {
   };
   return (
     <div style={{ display: "flex", height: "750px" }}>
-      <Sidebar className="app">
+      <Sidebar className="app max-md:hidden">
         <Menu>
           <NavLink to={""}>
             <img src={Webicien} className="m-auto" alt="" />

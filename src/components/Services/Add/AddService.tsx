@@ -18,6 +18,7 @@ import { ServiceType } from "@/utils/Types";
 import SField from "../SField";
 import axios from "axios";
 import { useQueryClient } from "react-query";
+import { Add } from "@mui/icons-material";
 
 const schema = yup.object({
   id: yup.number().required(),
@@ -55,7 +56,9 @@ const AddServiceModal = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-blue-700 text-white">Add Service</Button>
+        <Button className="bg-blue-700 text-white">
+          <Add />
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

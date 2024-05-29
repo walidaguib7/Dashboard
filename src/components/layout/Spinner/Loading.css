@@ -1,0 +1,53 @@
+.Spinner {
+  width: 100px;
+  height: 100px;
+  background-color: #e8e3e3;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -50px;
+  margin-top: -50px;
+  color: white;
+  border-radius: 50%;
+  border: 5px solid aqua;
+
+  transition: transform 0.3s;
+  border-left-color: transparent;
+  animation-name: spin;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes coloring {
+  0% {
+    background-color: #e8e3e3;
+  }
+
+  50% {
+    background-color: rgb(100, 100, 219);
+  }
+
+  100% {
+    background-color: rgb(43, 189, 214);
+  }
+}
+
+.Spinner:hover {
+  animation-name: coloring;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: 3;
+  animation-fill-mode: backwards;
+}
