@@ -80,11 +80,11 @@ const Login = () => {
       <Button
         type="submit"
         onClick={handleSubmit(Submit)}
-        className="bg-slate-900 mb-3">
+        className="bg-blue-500 mb-2 mt-2 ">
         Sign In
       </Button>
 
-      <Button className="bg-slate-700 " onClick={() => navigate("/create")}>
+      <Button className="bg-pink-500 mt-1 " onClick={() => navigate("/create")}>
         Create account
       </Button>
     </form>

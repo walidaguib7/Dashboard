@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 
 import axios from "axios";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 import { useForm } from "react-hook-form";
 import { BlogTypes, Blogschema } from "../BlogTypes";
@@ -30,10 +30,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { CategoryTypes } from "../Category/Category";
+import { Add, ErrorOutline } from "@mui/icons-material";
+import AddCategory from "../Category/AddCategory";
 
 const AddForm = () => {
+  const queryClient = useQueryClient();
   const [fl, setFileId] = useState<number>(0);
   const [file, setFile] = useState<File | null>(null);
+  const [isFileError, setFileError] = useState<boolean>(false);
   const Upload = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFile(e.target.files?.[0] ?? null);
   };
@@ -59,7 +63,10 @@ const AddForm = () => {
         .then((res) => {
           setFileId(res.data.id);
         })
-        .catch((err) => alert(err));
+        .catch((err) => {
+          setFileError(true);
+          setTimeout(() => setFileError(false), 3000);
+        });
     },
     [file]
   );
@@ -92,7 +99,7 @@ const AddForm = () => {
       userId: form.getValues().userId,
       fileId: fl,
     };
-    const response = await axios
+    await axios
       .post(
         `http://localhost:5171/api/blog/${parseInt(
           form.getValues().categoryId
@@ -104,9 +111,13 @@ const AddForm = () => {
           },
         }
       )
-      .then((res) => console.log(res.data))
+      .then((res) => {
+        console.log(res.data);
+        queryClient.invalidateQueries("blogs");
+        form.reset();
+      })
       .catch((err) => console.log(err));
-  }, [fl, form]);
+  }, [fl, form, queryClient]);
 
   return (
     <Form {...form}>
@@ -118,9 +129,15 @@ const AddForm = () => {
         className="flex flex-col gap-4 mt-4">
         <div className="flex gap-3">
           <Input type="file" onChange={Upload} placeholder="choose an image" />
-          <Button className="bg-blue-700" onClick={Submit}>
-            Upload Image
-          </Button>
+          {isFileError == true ? (
+            <Button className="bg-red-600">
+              <ErrorOutline />
+            </Button>
+          ) : (
+            <Button className="bg-blue-700" onClick={Submit}>
+              Upload Image
+            </Button>
+          )}
         </div>
 
         <FormField
@@ -165,30 +182,38 @@ const AddForm = () => {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="categoryId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>category</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {data?.data.map((category: CategoryTypes) => (
-                    <SelectItem value={category.id.toString()}>
-                      {category.title}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="flex gap-2 ">
+          <FormField
+            control={form.control}
+            name="categoryId"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {data?.data.map((category: CategoryTypes) => (
+                      <SelectItem value={category.id.toString()}>
+                        {category.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <AddCategory>
+            <Button className="bg-blue-700">
+              <Add />
+            </Button>
+          </AddCategory>
+        </div>
         <Button className="bg-blue-700">Submit</Button>
       </form>
     </Form>

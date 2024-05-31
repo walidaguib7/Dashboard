@@ -1,3 +1,5 @@
+
+
 export type LoginType = {
     username: string;
     password: string;
@@ -14,3 +16,7 @@ export type ServiceType = {
     title: string;
     description: string;
 }
+
+
+export const ImageUrl = "http://localhost:5171/MyImages/";
+
