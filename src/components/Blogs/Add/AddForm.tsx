@@ -19,8 +19,6 @@ import { useForm } from "react-hook-form";
 import { BlogTypes, Blogschema } from "../BlogTypes";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { useCallback, useState } from "react";
-
 import {
   Form,
   FormControl,
@@ -32,44 +30,11 @@ import {
 import { CategoryTypes } from "../Category/Category";
 import { Add, ErrorOutline } from "@mui/icons-material";
 import AddCategory from "../Category/AddCategory";
+import { useUpload } from "@/hooks/Blog/useUpload";
+import { usePost } from "@/hooks/Blog/usePost";
 
 const AddForm = () => {
-  const queryClient = useQueryClient();
-  const [fl, setFileId] = useState<number>(0);
-  const [file, setFile] = useState<File | null>(null);
-  const [isFileError, setFileError] = useState<boolean>(false);
-  const Upload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFile(e.target.files?.[0] ?? null);
-  };
-
-  const Submit = useCallback(
-    async (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
-      if (!file) {
-        alert("Please select a file to upload");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("file", file);
-
-      await axios
-        .post("http://localhost:5171/api/files", formData, {
-          headers: {
-            Accept: "/",
-            "Content-Type": "'multipart/form-data'",
-          },
-        })
-        .then((res) => {
-          setFileId(res.data.id);
-        })
-        .catch((err) => {
-          setFileError(true);
-          setTimeout(() => setFileError(false), 3000);
-        });
-    },
-    [file]
-  );
+  const { Submit, Upload, fl, isFileError } = useUpload();
 
   const { data } = useQuery(
     "categories",
@@ -91,33 +56,19 @@ const AddForm = () => {
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const SubmitForm = useCallback(async () => {
-    const data = {
-      Title: form.getValues().Title,
+  const { SubmitForm } = usePost({
+    reset: form.reset,
+    categoryId: form.getValues().categoryId,
+    data: {
+      id: 0,
+      title: form.getValues().Title,
       description: form.getValues().description,
       content: form.getValues().content,
-      userId: form.getValues().userId,
+      categoryId: form.getValues().categoryId,
+      userId: sessionStorage.getItem("userId") || "",
       fileId: fl,
-    };
-    await axios
-      .post(
-        `http://localhost:5171/api/blog/${parseInt(
-          form.getValues().categoryId
-        )}`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        queryClient.invalidateQueries("blogs");
-        form.reset();
-      })
-      .catch((err) => console.log(err));
-  }, [fl, form, queryClient]);
+    },
+  });
 
   return (
     <Form {...form}>

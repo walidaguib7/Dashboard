@@ -17,6 +17,19 @@ export type ServiceType = {
     description: string;
 }
 
+export type BlogType = {
+    id: number;
+    title: string;
+    description: string;
+    content: string;
+    category_title?: string;
+    username?: string;
+    image?: string;
+    fileId: number;
+    userId: string;
+    categoryId: string;
+};
+
 
 export const ImageUrl = "http://localhost:5171/MyImages/";
 
