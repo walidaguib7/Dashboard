@@ -7,13 +7,27 @@ import Webicien from "/Webicien.png";
 import { Delete, Update } from "@mui/icons-material";
 import { useBlogStore } from "@/store/BlogStore";
 import UpdateBlog from "../Update/UpdateBlog";
+import { useState } from "react";
 
-const BlogList = () => {
+type ListProps = {
+  title: string;
+};
+
+const BlogList = ({ title }: ListProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [page, setPage] = useState<number>(1);
+
   const client = useQueryClient();
   const blogStore = useBlogStore();
-  const { data: blogs } = useQuery("blogs", async () => {
-    return await axios.get("http://localhost:5171/api/blog");
-  });
+  const { data: blogs } = useQuery(
+    ["blogs", page, title],
+    async () => {
+      return await axios.get(
+        `http://localhost:5171/api/blog?Title=${title}&PageNumber=${page}&Limit=${9}`
+      );
+    },
+    { refetchOnMount: "always" }
+  );
 
   const DeleteBlog = (id: number) => {
     axios
@@ -50,7 +64,14 @@ const BlogList = () => {
               <UpdateBlog>
                 <Update
                   color="primary"
-                  onClick={() => blogStore.setId(blog.id)}
+                  onClick={() => {
+                    blogStore.setId(blog.id);
+                    blogStore.setData({
+                      title: blog.title,
+                      description: blog.description,
+                      content: blog.content,
+                    });
+                  }}
                 />
               </UpdateBlog>
               <Delete color="error" onClick={() => DeleteBlog(blog.id)} />

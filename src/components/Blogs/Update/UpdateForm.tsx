@@ -33,15 +33,13 @@ import AddCategory from "../Category/AddCategory";
 import { useUpload } from "@/hooks/Blog/useUpload";
 import { usePost } from "@/hooks/Blog/usePost";
 import { useBlogStore } from "@/store/BlogStore";
-import { useEffect } from "react";
+
+import { usePut } from "@/hooks/Blog/usePut";
 
 const UpdateForm = () => {
   const { Submit, Upload, fl, isFileError } = useUpload();
   const blogStore = useBlogStore();
 
-  useEffect(() => {
-    console.log(blogStore.getId());
-  }, [blogStore]);
   const { data } = useQuery(
     "categories",
     async () => {
@@ -53,20 +51,19 @@ const UpdateForm = () => {
   const form = useForm<BlogTypes>({
     resolver: yupResolver(Blogschema),
     defaultValues: {
-      Title: "",
-      content: "",
-      description: "",
+      Title: blogStore.getData().title,
+      content: blogStore.getData().content,
+      description: blogStore.getData().description,
       userId: sessionStorage.getItem("userId") || "",
       categoryId: "",
     },
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { SubmitForm } = usePost({
+  const { SubmitForm } = usePut({
     reset: form.reset,
-    categoryId: form.getValues().categoryId,
     data: {
-      id: 9,
+      id: 0,
       title: form.getValues().Title,
       description: form.getValues().description,
       content: form.getValues().content,
@@ -171,7 +168,7 @@ const UpdateForm = () => {
             </Button>
           </AddCategory>
         </div>
-        <Button className="bg-blue-700">Submit</Button>
+        <Button className="bg-blue-700">Update</Button>
       </form>
     </Form>
   );

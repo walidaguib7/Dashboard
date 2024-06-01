@@ -2,8 +2,10 @@ import AddBlog from "@/components/Blogs/Add/AddBlog";
 import BlogList from "@/components/Blogs/BlogList/BlogList";
 
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
 const BlogPage = () => {
+  const [title, setTitle] = useState("");
   return (
     <div className="px-[30px] pt-6 ">
       <div className="flex justify-center items-center">
@@ -13,12 +15,13 @@ const BlogPage = () => {
           <Input
             className="border-2 border-slate-700 shadow-lg"
             placeholder="search..."
+            onChange={(e) => setTitle(e.target.value)}
           />
         </div>
       </div>
 
       <div className="pt-6">
-        <BlogList />
+        <BlogList title={title} />
       </div>
     </div>
   );

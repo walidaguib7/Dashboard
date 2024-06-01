@@ -35,7 +35,7 @@ const ServicesPage = () => {
         `http://localhost:5171/api/services?PageNumber=${page}&Limit=${9}&Title=${title}`
       );
     },
-    { keepPreviousData: true, cacheTime: 0 }
+    { keepPreviousData: true }
   );
 
   const query = useQueryClient();
