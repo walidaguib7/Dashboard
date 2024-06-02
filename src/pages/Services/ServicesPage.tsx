@@ -1,14 +1,6 @@
 import AddServiceModal from "@/components/Services/Add/AddService";
 import "./Services.css";
-import NoData from "/NoData.svg";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import axios from "axios";
@@ -47,29 +39,6 @@ const ServicesPage = () => {
   if (isLoading == true) {
     return <Loading />;
   }
-  if (data?.data.length == 0) {
-    return (
-      <div className="px-[30px] pt-6 ">
-        <div className="flex justify-center items-center">
-          <h2 className="text-2xl font-bold text-slate-700 flex-1">Services</h2>
-          <div className="flex gap-3">
-            <AddServiceModal />
-            <Input
-              className="border-2 border-slate-700 shadow-lg"
-              placeholder="search..."
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="w-full">
-          <img
-            src={NoData}
-            className="w-[350px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-          />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="px-[30px] pt-6 ">
@@ -88,9 +57,9 @@ const ServicesPage = () => {
       <div className="pt-6">
         <div className="services  mt-2">
           {data?.data.map((service: ServiceType) => (
-            <Card className=" shadow-lg">
+            <Card className="w-[300px] shadow-lg">
               <CardHeader>
-                <CardTitle>{service.title}</CardTitle>
+                <CardTitle className="flex w-fit">{service.title}</CardTitle>
                 <CardDescription className="w-full overflow-hidden">
                   {service.description}
                 </CardDescription>
@@ -107,29 +76,25 @@ const ServicesPage = () => {
           ))}
         </div>
 
-        <Pagination className="mt-3 mb-4">
-          <PaginationContent>
-            <PaginationItem>
-              {page >= 2 && (
-                <PaginationPrevious
-                  onClick={() => setPage((prev) => prev - 1)}
-                  href="#"
-                />
-              )}
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">{page}</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              {data?.data.length != 0 && (
-                <PaginationNext
-                  onClick={() => setPage((prev) => prev + 1)}
-                  href="#"
-                />
-              )}
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        {data?.data.length > 0 && (
+          <div className="w-full">
+            <div className="mt-4  flex justify-center gap-8 items-center m-auto">
+              <Button
+                className="bg-blue-700"
+                onClick={() => setPage((prev) => prev - 1)}
+                disabled={page == 1}>
+                -
+              </Button>
+              <span>{page}</span>
+              <Button
+                className="bg-blue-700"
+                onClick={() => setPage((prev) => prev + 1)}
+                disabled={data?.data.length != 9}>
+                +
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
